@@ -6,14 +6,15 @@ cv2.imshow("input", image)
 
 # 创建一个与原图像一样大小的空白图像
 blank = np.zeros_like(image)
-blank[:, :] = (-20, -20, -20)  # 空白图像的bgr都为50，这里增加或者减小值
+blank[:, :] = (100, 100, 100)  # bgr 分别为2，即为图像对比度比例
 
-# 将原图像和空白图像相加即可增加亮度
-result_1 = cv2.add(image,blank)
-cv2.imshow("result_1",result_1)
+# # 将原图像和空白图像相乘即可增加对比度
+# result_1 = cv2.multiply(image,blank)
+# cv2.imshow("result_1",result_1)
 
-# 将原图像和空白图像相减即可减小亮度
-# result_2 = cv2.subtract(image, blank)
-# cv2.imshow("result_1", result_2)
+# 将原图像和空白图像相除即可减小对比度
+# result_2 = cv2.divide(image, blank)
+# cv2.imshow("result_2", result_2)
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()

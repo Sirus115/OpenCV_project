@@ -56,7 +56,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="btn_operations">
         <property name="text">
          <string>图像形态学处理</string>
         </property>
@@ -158,7 +158,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="label_show">
           <property name="text">
            <string>结果显示</string>
           </property>
@@ -227,7 +227,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>10</y>
+          <y>0</y>
           <width>751</width>
           <height>231</height>
          </rect>
@@ -452,10 +452,10 @@
           </rect>
          </property>
          <property name="text">
-          <string>0%</string>
+          <string/>
          </property>
         </widget>
-        <widget class="QLabel" name="lbl_bri_2">
+        <widget class="QLabel" name="lbl_con">
          <property name="geometry">
           <rect>
            <x>720</x>
@@ -465,10 +465,10 @@
           </rect>
          </property>
          <property name="text">
-          <string>0%</string>
+          <string/>
          </property>
         </widget>
-        <widget class="QSlider" name="sld_bright_2">
+        <widget class="QSlider" name="sld_contrast">
          <property name="geometry">
           <rect>
            <x>430</x>
@@ -483,7 +483,200 @@
         </widget>
        </widget>
       </widget>
-      <widget class="QWidget" name="page_2"/>
+      <widget class="QWidget" name="page_2">
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>0</y>
+          <width>751</width>
+          <height>231</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>操作选择</string>
+        </property>
+        <widget class="QComboBox" name="cbx_smooth">
+         <property name="geometry">
+          <rect>
+           <x>340</x>
+           <y>40</y>
+           <width>241</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>图像平滑</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>均值滤波</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>方框滤波</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>高斯滤波</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>中值滤波</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QComboBox" name="cbx_gray">
+         <property name="geometry">
+          <rect>
+           <x>30</x>
+           <y>40</y>
+           <width>241</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>阈值(灰度图)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>cv2.THRESH_BINARY</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>cv2.THRESH_BINARY_INV</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>cv2.THRESH_TRUNC</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>cv2.THRESH_TOZERO</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>cv2.THRESH_TOZERO_INV</string>
+          </property>
+         </item>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="page_3">
+       <widget class="QGroupBox" name="groupBox_4">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>0</y>
+          <width>751</width>
+          <height>231</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>操作选择</string>
+        </property>
+        <widget class="QPushButton" name="btn_erode">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>40</y>
+           <width>151</width>
+           <height>34</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>腐蚀(去毛刺)</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_dilate">
+         <property name="geometry">
+          <rect>
+           <x>220</x>
+           <y>40</y>
+           <width>151</width>
+           <height>34</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>膨胀</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_mor">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>80</y>
+           <width>151</width>
+           <height>34</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>梯度运算</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="cbx_cal">
+         <property name="geometry">
+          <rect>
+           <x>400</x>
+           <y>40</y>
+           <width>141</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>运算</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>开运算</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>闭运算</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QComboBox" name="cbx_hat">
+         <property name="geometry">
+          <rect>
+           <x>220</x>
+           <y>80</y>
+           <width>141</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>礼帽与黑帽</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>礼帽</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>黑帽</string>
+          </property>
+         </item>
+        </widget>
+       </widget>
+      </widget>
      </widget>
     </widget>
    </item>
