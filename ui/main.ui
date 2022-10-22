@@ -235,23 +235,10 @@
         <property name="title">
          <string>操作选择</string>
         </property>
-        <widget class="QPushButton" name="btn_edge">
-         <property name="geometry">
-          <rect>
-           <x>370</x>
-           <y>40</y>
-           <width>119</width>
-           <height>34</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>边界填充</string>
-         </property>
-        </widget>
         <widget class="QPushButton" name="btn_merge">
          <property name="geometry">
           <rect>
-           <x>530</x>
+           <x>600</x>
            <y>40</y>
            <width>119</width>
            <height>34</height>
@@ -264,22 +251,22 @@
         <widget class="QLabel" name="label_6">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>140</y>
-           <width>91</width>
+           <x>30</x>
+           <y>109</y>
+           <width>31</width>
            <height>21</height>
           </rect>
          </property>
          <property name="text">
-          <string>缩放比例：</string>
+          <string>fx:</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="txt_pro">
+        <widget class="QLineEdit" name="txt_fx">
          <property name="geometry">
           <rect>
-           <x>130</x>
-           <y>140</y>
-           <width>81</width>
+           <x>60</x>
+           <y>109</y>
+           <width>51</width>
            <height>25</height>
           </rect>
          </property>
@@ -287,8 +274,8 @@
         <widget class="QPushButton" name="btn_zoom">
          <property name="geometry">
           <rect>
-           <x>230</x>
-           <y>130</y>
+           <x>220</x>
+           <y>99</y>
            <width>119</width>
            <height>34</height>
           </rect>
@@ -300,8 +287,8 @@
         <widget class="QLabel" name="label_2">
          <property name="geometry">
           <rect>
-           <x>380</x>
-           <y>140</y>
+           <x>370</x>
+           <y>109</y>
            <width>41</width>
            <height>21</height>
           </rect>
@@ -310,37 +297,11 @@
           <string>亮度</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_18">
-         <property name="geometry">
-          <rect>
-           <x>430</x>
-           <y>130</y>
-           <width>119</width>
-           <height>34</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>提高</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="pushButton_19">
-         <property name="geometry">
-          <rect>
-           <x>560</x>
-           <y>130</y>
-           <width>119</width>
-           <height>34</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>降低</string>
-         </property>
-        </widget>
         <widget class="QPushButton" name="pushButton_20">
          <property name="geometry">
           <rect>
-           <x>240</x>
-           <y>180</y>
+           <x>230</x>
+           <y>160</y>
            <width>119</width>
            <height>34</height>
           </rect>
@@ -352,8 +313,8 @@
         <widget class="QPushButton" name="pushButton_21">
          <property name="geometry">
           <rect>
-           <x>110</x>
-           <y>180</y>
+           <x>100</x>
+           <y>160</y>
            <width>119</width>
            <height>34</height>
           </rect>
@@ -365,8 +326,8 @@
         <widget class="QLabel" name="label_7">
          <property name="geometry">
           <rect>
-           <x>40</x>
-           <y>190</y>
+           <x>30</x>
+           <y>170</y>
            <width>61</width>
            <height>21</height>
           </rect>
@@ -378,8 +339,8 @@
         <widget class="QPushButton" name="btn_graph">
          <property name="geometry">
           <rect>
-           <x>430</x>
-           <y>180</y>
+           <x>420</x>
+           <y>160</y>
            <width>119</width>
            <height>34</height>
           </rect>
@@ -391,7 +352,7 @@
         <widget class="QPushButton" name="btn_load">
          <property name="geometry">
           <rect>
-           <x>40</x>
+           <x>30</x>
            <y>40</y>
            <width>119</width>
            <height>34</height>
@@ -401,25 +362,12 @@
           <string>选择文件</string>
          </property>
         </widget>
-        <widget class="QScrollBar" name="horizontalScrollBar">
-         <property name="geometry">
-          <rect>
-           <x>410</x>
-           <y>100</y>
-           <width>271</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
         <widget class="QComboBox" name="cbx_color">
          <property name="geometry">
           <rect>
            <x>200</x>
            <y>40</y>
-           <width>131</width>
+           <width>151</width>
            <height>31</height>
           </rect>
          </property>
@@ -443,6 +391,95 @@
            <string>Red</string>
           </property>
          </item>
+        </widget>
+        <widget class="QComboBox" name="cbx_edge">
+         <property name="geometry">
+          <rect>
+           <x>400</x>
+           <y>40</y>
+           <width>151</width>
+           <height>31</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>边界填充</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>复制法</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>反射法</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>反射法_101</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>外包装法</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>常量法</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLabel" name="label_8">
+         <property name="geometry">
+          <rect>
+           <x>120</x>
+           <y>109</y>
+           <width>31</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>fy:</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="txt_fy">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>109</y>
+           <width>51</width>
+           <height>25</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QSlider" name="sld_bright">
+         <property name="geometry">
+          <rect>
+           <x>420</x>
+           <y>110</y>
+           <width>281</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+        <widget class="QLabel" name="lbl_bri">
+         <property name="geometry">
+          <rect>
+           <x>710</x>
+           <y>100</y>
+           <width>31</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>0%</string>
+         </property>
         </widget>
        </widget>
       </widget>
