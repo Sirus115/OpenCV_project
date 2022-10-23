@@ -1,16 +1,14 @@
 import os
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QPlainTextEdit, QMessageBox, QLabel, QFileDialog, \
-    QSlider
+from PyQt5.QtWidgets import QFileDialog, QSlider
 from PyQt5 import uic
-from PyQt5.QtGui import QIcon, QImage, QPixmap
 import cv2  # opencv读取的格式是BGR
 import matplotlib.pyplot as plt
 import numpy as np
-from PySide2.QtUiTools import QUiLoader
 from pyqt5_plugins.examplebuttonplugin import QtGui
 
 import globalVar
+from window import text_window
 
 
 class Stats:
@@ -25,6 +23,10 @@ class Stats:
         self.ui.btn_basic.clicked.connect(self.display1)
         self.ui.btn_smooth.clicked.connect(self.display2)
         self.ui.btn_operations.clicked.connect(self.display3)
+        self.ui.btn_gradient.clicked.connect(self.display4)
+        self.ui.btn_edge.clicked.connect(self.display5)
+        self.ui.btn_histogram.clicked.connect(self.display6)
+        self.ui.btn_spe.clicked.connect(self.display7)
 
         # slider初始化
         # 亮度调整
@@ -34,8 +36,8 @@ class Stats:
         self.ui.sld_bright.setValue(0)  # 设置初始值
         self.ui.sld_bright.setTickPosition(QSlider.TicksBelow)  # 设置刻度线位置
         # 对比度调整
-        self.ui.sld_contrast.setMaximum(50)  # 设置最大最小值
-        self.ui.sld_contrast.setMinimum(-50)
+        self.ui.sld_contrast.setMaximum(25)  # 设置最大最小值
+        self.ui.sld_contrast.setMinimum(-25)
         self.ui.sld_contrast.setSingleStep(1)  # 设置单步值
         self.ui.sld_contrast.setValue(0)  # 设置初始值
         self.ui.sld_contrast.setTickPosition(QSlider.TicksBelow)  # 设置刻度线位置
@@ -59,6 +61,24 @@ class Stats:
         self.ui.cbx_cal.currentIndexChanged.connect(self.calculate)
         self.ui.btn_mor.clicked.connect(self.gradient)
         self.ui.cbx_hat.currentIndexChanged.connect(self.tophat)
+        # page4
+        self.ui.btn_sobel.clicked.connect(self.sobel)
+        self.ui.btn_scharr.clicked.connect(self.scharr)
+        self.ui.btn_lpc.clicked.connect(self.laplacian)
+        self.ui.btn_canny.clicked.connect(self.canny)
+        # page5
+        self.ui.btn_gaussup.clicked.connect(self.Gaussup)
+        self.ui.btn_gaussdown.clicked.connect(self.Gaussdown)
+        self.ui.btn_lap.clicked.connect(self.lap)
+        self.ui.btn_getedge.clicked.connect(self.getedge)
+        self.ui.btn_mode.clicked.connect(self.mode)
+        # page6
+        self.ui.cbx_his.currentIndexChanged.connect(self.histogram)
+        self.ui.cbx_fourier.currentIndexChanged.connect(self.fourier)
+        # page7
+        self.ui.btn_harris.clicked.connect(self.harris)
+        self.ui.btn_sift.clicked.connect(self.sift)
+
         # 路径初始化
         self.curPath = os.path.abspath(os.path.dirname(__file__))
         self.rootPath = self.curPath[:self.curPath.find("OpenCV_project\\") + len("OpenCV_project\\")]
@@ -76,10 +96,23 @@ class Stats:
     def display3(self):
         self.ui.stackedWidget.setCurrentIndex(2)
 
+    def display4(self):
+        self.ui.stackedWidget.setCurrentIndex(3)
+
+    def display5(self):
+        self.ui.stackedWidget.setCurrentIndex(4)
+
+    def display6(self):
+        self.ui.stackedWidget.setCurrentIndex(5)
+
+    def display7(self):
+        self.ui.stackedWidget.setCurrentIndex(6)
+
     '''------------------------------------------------图像基本操作-----------------------------------------------------'''
 
     # 读取数据
     def btn_load_read(self):
+        self.ui.label_show.setText('结果显示')
         f = QFileDialog.getOpenFileName(None, "请选择读取的文件",
                                         self.rootPath, "JPG(*.jpg);;PNG(*.png);;MP4(*.mp4)")
 
@@ -112,6 +145,7 @@ class Stats:
 
     # 颜色通道提取
     def cbx_color_change(self):
+        self.ui.label_show.setText('结果显示')
         img = cv2.imread(self.file)
         b, g, r = cv2.split(img)
         method = self.ui.cbx_color.currentText()
@@ -130,6 +164,7 @@ class Stats:
 
     # 边界填充
     def cbx_edge_change(self):
+        self.ui.label_show.setText('结果显示')
         method = self.ui.cbx_edge.currentText()
         img = cv2.imread(self.file)
         top_size, bottom_size, left_size, right_size = (50, 50, 50, 50)
@@ -163,6 +198,7 @@ class Stats:
 
     # 图像融合
     def btn_merge_click(self):
+        self.ui.label_show.setText('结果显示')
         f = QFileDialog.getOpenFileName(None, "请选择融合图片读来自的文件",
                                         self.rootPath, "JPG(*.jpg);;PNG(*.png);;MP4(*.mp4)")
 
@@ -178,15 +214,19 @@ class Stats:
 
     # 图片缩放
     def btn_zoom_click(self):
+        self.ui.label_show.setText('结果显示')
         img = cv2.imread(self.file)
         fx = float(self.ui.txt_fx.text())
         fy = float(self.ui.txt_fy.text())
+        # if fx == 0 or fy == 0:
+        #     self.ui.btn_zoom.setEnabled(False)
         res = cv2.resize(img, (0, 0), fx=fx, fy=fy)
         cv2.imwrite(self.result + 'chapter1/' + 'zoom.jpg', res)
         self.imshow(self.result + 'chapter1/' + 'zoom.jpg', self.ui.img_new)
 
     # 亮度调节
     def brightness(self):
+        self.ui.label_show.setText('结果显示')
         img = cv2.imread(self.file)
         level = self.ui.sld_bright.value()
         self.ui.lbl_bri.setText(str(level))
@@ -205,6 +245,7 @@ class Stats:
 
     # 对比度调节
     def contrast(self):
+        self.ui.label_show.setText('结果显示')
         img = cv2.imread(self.file)
         level = self.ui.sld_contrast.value()
         self.ui.lbl_con.setText(str(level))
@@ -223,6 +264,7 @@ class Stats:
 
     # 直方图均衡化
     def graph(self):
+        self.ui.label_show.setText('结果显示')
         img = cv2.imread(self.file)
         # 彩色图像均衡化
         (b, g, r) = cv2.split(img)
@@ -238,6 +280,7 @@ class Stats:
     '''------------------------------------------阈值与平滑处理------------------------------------------------------'''
 
     def cbx_gray_change(self):
+        self.ui.label_show.setText('结果显示')
         method = self.ui.cbx_gray.currentText()
         img_gray = cv2.imread(self.file)
         if method == 'cv2.THRESH_BINARY':
@@ -261,6 +304,7 @@ class Stats:
         self.imshow(self.result + 'chapter2/' + 'img_gray.jpg', self.ui.img_new)
 
     def smooth(self):
+        self.ui.label_show.setText('结果显示')
         img = cv2.imread(self.file)
         method = self.ui.cbx_smooth.currentText()
         if method == '均值滤波':
@@ -283,6 +327,7 @@ class Stats:
 
     # 腐蚀
     def erode(self):
+        self.ui.label_show.setText('结果显示')
         # 第一个效果更好
         img = cv2.imread(self.file)
         kernel = np.ones((3, 3), np.uint8)
@@ -299,6 +344,7 @@ class Stats:
 
     # 膨胀
     def dilate(self):
+        self.ui.label_show.setText('结果显示')
         img = cv2.imread(self.file)
         kernel = np.ones((30, 30), np.uint8)
         dilate_1 = cv2.dilate(img, kernel, iterations=1)
@@ -326,6 +372,7 @@ class Stats:
 
     # 梯度运算
     def gradient(self):
+        self.ui.label_show.setText('结果显示')
         img = cv2.imread(self.file)
         kernel = np.ones((5, 5), np.uint8)
         gradient = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
@@ -334,6 +381,7 @@ class Stats:
 
     # 礼帽与黑帽
     def tophat(self):
+        self.ui.label_show.setText('结果显示')
         img = cv2.imread(self.file)
         method = self.ui.cbx_hat.currentText()
         kernel = np.ones((5, 5), np.uint8)
@@ -345,6 +393,236 @@ class Stats:
             hat = cv2.morphologyEx(img, cv2.MORPH_BLACKHAT, kernel)
         cv2.imwrite(self.result + 'chapter3/' + 'img_hat.jpg', hat)
         self.imshow(self.result + 'chapter3/' + 'img_hat.jpg', self.ui.img_new)
+
+    '''----------------------------------------------图像梯度处理-------------------------------------------------------'''
+
+    def sobel(self):
+        self.ui.label_show.setText('结果显示')
+        img = cv2.imread(self.file)
+        # 分别计算x、y方向梯度，再合并
+        sobelx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)
+        sobelx = cv2.convertScaleAbs(sobelx)
+        sobely = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=3)
+        sobely = cv2.convertScaleAbs(sobely)
+        sobelxy = cv2.addWeighted(sobelx, 0.5, sobely, 0.5, 0)
+        cv2.imwrite(self.result + 'chapter4/' + 'sobel.jpg', sobelxy)
+        self.imshow(self.result + 'chapter4/' + 'sobel.jpg', self.ui.img_new)
+
+    def scharr(self):
+        self.ui.label_show.setText('结果显示')
+        img = cv2.imread(self.file)
+        scharrx = cv2.Scharr(img, cv2.CV_64F, 1, 0)
+        scharry = cv2.Scharr(img, cv2.CV_64F, 0, 1)
+        scharrx = cv2.convertScaleAbs(scharrx)
+        scharry = cv2.convertScaleAbs(scharry)
+        scharrxy = cv2.addWeighted(scharrx, 0.5, scharry, 0.5, 0)
+        cv2.imwrite(self.result + 'chapter4/' + 'scharr.jpg', scharrxy)
+        self.imshow(self.result + 'chapter4/' + 'scharr.jpg', self.ui.img_new)
+
+    def laplacian(self):
+        self.ui.label_show.setText('结果显示')
+        img = cv2.imread(self.file)
+        laplacian = cv2.Laplacian(img, cv2.CV_64F)
+        laplacian = cv2.convertScaleAbs(laplacian)
+        cv2.imwrite(self.result + 'chapter4/' + 'laplacian.jpg', laplacian)
+        self.imshow(self.result + 'chapter4/' + 'laplacian.jpg', self.ui.img_new)
+
+    def canny(self):
+        self.ui.label_show.setText('结果显示')
+        img = cv2.imread(self.file)
+        result = cv2.Canny(img, 50, 100)
+        cv2.imwrite(self.result + 'chapter4/' + 'canny.jpg', result)
+        self.imshow(self.result + 'chapter4/' + 'canny.jpg', self.ui.img_new)
+
+    '''----------------------------------------图像金字塔与轮廓检测(模板匹配)----------------------------------------------'''
+
+    # 高斯 上采样
+    def Gaussup(self):
+        img = cv2.imread(self.file)
+        up = cv2.pyrUp(img)
+        self.ui.label_origin.setText('原始图像' + str(img.shape))
+        self.ui.label_show.setText('处理结果' + str(up.shape))
+
+        up_down = cv2.pyrDown(cv2.pyrUp(img))
+        cv2.imwrite(self.result + 'chapter5/' + 'Gauss_up_down.jpg', up_down)
+        self.imshow(self.result + 'chapter5/' + 'Gauss_up_down.jpg', self.ui.img_new)
+
+    # 高斯 下采样
+    def Gaussdown(self):
+        img = cv2.imread(self.file)
+        down = cv2.pyrDown(img)
+        self.ui.label_origin.setText('原始图像' + str(img.shape))
+        self.ui.label_show.setText('处理结果' + str(down.shape))
+
+        down_up = cv2.pyrUp(cv2.pyrDown(img))
+        cv2.imwrite(self.result + 'chapter5/' + 'Gauss_down_up.jpg', down_up)
+        self.imshow(self.result + 'chapter5/' + 'Gauss_down_up.jpg', self.ui.img_new)
+
+    # 拉普拉斯金字塔
+    def lap(self):
+        self.ui.label_show.setText('结果显示')
+        img = cv2.imread(self.file)
+        down = cv2.pyrDown(img)
+        down_up = cv2.pyrUp(down)
+        l_1 = img - down_up
+        cv2.imwrite(self.result + 'chapter5/' + 'Laplacian_pyramid.jpg', l_1)
+        self.imshow(self.result + 'chapter5/' + 'Laplacian_pyramid.jpg', self.ui.img_new)
+
+    # 图像轮廓
+    def getedge(self):
+        self.ui.label_show.setText('结果显示')
+        img = cv2.imread(self.file)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        ret, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+        # 计算出嵌套轮廓
+        # 这里新版本的cv2.findContours返回的只有两个值
+        contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        # 传入绘制图像，轮廓，轮廓索引(-1全部)，颜色模式，线条厚度
+        draw_img = img.copy()  # 注意需要copy,要不原图会变
+        res = cv2.drawContours(draw_img, contours, -1, (0, 0, 255), 2)
+
+        cv2.imwrite(self.result + 'chapter5/' + 'edge.jpg', res)
+        self.imshow(self.result + 'chapter5/' + 'edge.jpg', self.ui.img_new)
+
+    # 模板匹配
+    def mode(self):
+        self.ui.label_show.setText('识别结果')
+        img = cv2.imread(self.file)
+        f = QFileDialog.getOpenFileName(None, "请选择融合图片读来自的文件",
+                                        self.rootPath, "JPG(*.jpg);;PNG(*.png);;MP4(*.mp4)")
+
+        sec_route = "".join(list(f[0]))
+        template = cv2.imread(sec_route, 0)
+        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        h, w = template.shape[:2]
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        threshold = 0.8
+        # 取匹配程度大于%80的坐标
+        loc = np.where(res >= threshold)
+        for pt in zip(*loc[::-1]):  # *号表示可选参数
+            bottom_right = (pt[0] + w, pt[1] + h)
+            cv2.rectangle(img, pt, bottom_right, (0, 255, 0), 1)
+        cv2.imwrite(self.result + 'chapter5/' + 'template matching.jpg', img)
+        self.imshow(self.result + 'chapter5/' + 'template matching.jpg', self.ui.img_new)
+
+    '''------------------------------------------直方图与傅里叶变换------------------------------------------------------'''
+
+    # 图像直方图
+    def histogram(self):
+        # img = cv2.imread(self.file)
+        method = self.ui.cbx_his.currentText()
+        if method == '直方图':
+            img = cv2.imread(self.file, 0)
+            hist = cv2.calcHist([img], [0], None, [256], [0, 256])  # (256, 1)
+            img = plt.hist(img.ravel(), 256)
+            plt.savefig(self.result + 'chapter6/' + 'histogram.jpg')
+            self.imshow(self.result + 'chapter6/' + 'histogram.jpg', self.ui.img_new)
+        elif method == '三通道直方图':
+            img = cv2.imread(self.file)
+            color = ('blue', 'green', 'red')
+            for i, color in enumerate(color):
+                hist = cv2.calcHist([img], [i], None, [256], [0, 256])
+                plt.plot(hist, color=color)
+                plt.xlim([0, 256])
+            plt.savefig(self.result + 'chapter6/' + 'Three channel histogram.jpg')
+            self.imshow(self.result + 'chapter6/' + 'Three channel histogram.jpg', self.ui.img_new)
+        elif method == '自适应直方图均衡化':
+            # 做均衡化
+            img = cv2.imread(self.file, 0)
+            equ = cv2.equalizeHist(img)
+            plt.hist(equ.ravel(), 256)
+
+            clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+            res_clahe = clahe.apply(
+                img)  # apply(func,*args,**kwargs)的返回值就是func()的返回值，apply()的元素参数是有序的，元素的顺序必须和func()形式参数的顺序一致
+            res = np.hstack((img, equ, res_clahe))
+            cv2.imwrite(self.result + 'chapter5/' + 'Adaptive histogram equalization.jpg', res)
+            self.imshow(self.result + 'chapter5/' + 'Adaptive histogram equalization.jpg', self.ui.img_new)
+
+    # 傅里叶变换
+    def fourier(self):
+        img = cv2.imread(self.file, 0)
+        method = self.ui.cbx_fourier.currentText()
+        img_float32 = np.float32(img)
+        if method == '低通滤波':
+            # 低频
+            dft = cv2.dft(img_float32, flags=cv2.DFT_COMPLEX_OUTPUT)
+            dft_shift = np.fft.fftshift(dft)
+
+            rows, cols = img.shape
+            crow, ccol = int(rows / 2), int(cols / 2)  # 中心位置
+
+            # 低通滤波
+            mask = np.zeros((rows, cols, 2), np.uint8)
+            mask[crow - 30:crow + 30, ccol - 30:ccol + 30] = 1
+
+            # IDFT
+            fshift = dft_shift * mask
+            f_ishift = np.fft.ifftshift(fshift)
+            img_back = cv2.idft(f_ishift)
+            img_back = cv2.magnitude(img_back[:, :, 0], img_back[:, :, 1])
+
+            plt.imshow(img_back, cmap='gray')
+            plt.savefig(self.result + 'chapter6/' + 'Low pass filtering.jpg')
+            self.imshow(self.result + 'chapter6/' + 'Low pass filtering.jpg', self.ui.img_new)
+        elif method == '高通滤波':
+            # 高频
+            dft = cv2.dft(img_float32, flags=cv2.DFT_COMPLEX_OUTPUT)
+            dft_shift = np.fft.fftshift(dft)
+
+            rows, cols = img.shape
+            crow, ccol = int(rows / 2), int(cols / 2)  # 中心位置
+
+            # 高通滤波
+            mask = np.ones((rows, cols, 2), np.uint8)
+            mask[crow - 30:crow + 30, ccol - 30:ccol + 30] = 0
+
+            # IDFT
+            fshift = dft_shift * mask
+            f_ishift = np.fft.ifftshift(fshift)
+            img_back = cv2.idft(f_ishift)
+            img_back = cv2.magnitude(img_back[:, :, 0], img_back[:, :, 1])
+
+            plt.imshow(img_back, cmap='gray')
+            plt.savefig(self.result + 'chapter6/' + 'High pass filtering.jpg')
+            self.imshow(self.result + 'chapter6/' + 'High pass filtering.jpg', self.ui.img_new)
+
+    '''-----------------------------------------------图像特征---------------------------------------------------------'''
+
+    # harris 特征
+    def harris(self):
+        img = cv2.imread(self.file)
+        self.ui.label_origin.setText('原始尺寸' + str(img.shape))
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # gray = np.float32(gray)
+        dst = cv2.cornerHarris(gray, 10, 5, 0.04)
+        self.ui.label_show.setText('结果尺寸' + str(dst.shape))
+
+        img[dst > 0.01 * dst.max()] = [0, 0, 255]
+        cv2.imwrite(self.result + 'chapter7/' + 'harris.jpg', img)
+        self.imshow(self.result + 'chapter7/' + 'harris.jpg', self.ui.img_new)
+
+    # SIFT
+    def sift(self):
+        img = cv2.imread(self.file)
+        key_points = img.copy()
+        # 实例化SIFT算法
+        sift = cv2.SIFT_create()
+        # 得到特征点
+        kp = sift.detect(img, None)
+        # 绘制特征点
+        cv2.drawKeypoints(img, kp, key_points)
+        # 计算特征
+        kp, des = sift.compute(img, kp)
+        self.ui.label_show.setText('特征点绘制')
+        file = open(file=self.result + 'chapter7/' + 'keypoint.txt', mode='w', encoding='utf-8')
+        file.write(str(des[0]))
+        file.close()
+        cv2.imwrite(self.result + 'chapter7/' + 'SIFT_keypoint.jpg', key_points)
+        self.imshow(self.result + 'chapter7/' + 'SIFT_keypoint.jpg', self.ui.img_new)
+
+        self.window = text_window.Stats()
+        self.window.ui.show()
 
     # 定义图片显示函数
     def imshow(self, file, label):

@@ -1,20 +1,31 @@
-import cv2
 import numpy as np
+import cv2
 
-image = cv2.imread('E:\Code\OpenCV_project\data\kitty.jpg')
-cv2.imshow("input", image)
+# 读取图片
+img = cv2.imread("face.jpg")
+key_points = img.copy()
 
-# 创建一个与原图像一样大小的空白图像
-blank = np.zeros_like(image)
-blank[:, :] = (100, 100, 100)  # bgr 分别为2，即为图像对比度比例
+# 实例化SIFT算法
+sift = cv2.SIFT_create()
 
-# # 将原图像和空白图像相乘即可增加对比度
-# result_1 = cv2.multiply(image,blank)
-# cv2.imshow("result_1",result_1)
+# 得到特征点
+kp = sift.detect(img, None)
+print(np.array(kp).shape)
 
-# 将原图像和空白图像相除即可减小对比度
-# result_2 = cv2.divide(image, blank)
-# cv2.imshow("result_2", result_2)
+# 绘制特征点
+cv2.drawKeypoints(img, kp, key_points)
 
+# 图片展示
+cv2.imshow("key points", key_points)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+# 保存图片
+cv2.imwrite("key_points.jpg", key_points)
+
+# 计算特征
+kp, des = sift.compute(img, kp)
+
+# 调试输出
+print(des.shape)
+print(des[0])
