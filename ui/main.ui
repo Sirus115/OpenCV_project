@@ -91,7 +91,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_8">
+       <widget class="QPushButton" name="btn_answer">
         <property name="text">
          <string>答题卡判卷</string>
         </property>

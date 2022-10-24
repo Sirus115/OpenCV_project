@@ -8,7 +8,7 @@ import numpy as np
 from pyqt5_plugins.examplebuttonplugin import QtGui
 
 import globalVar
-from window import text_window
+from window import text_window, answer_sheet
 
 
 class Stats:
@@ -78,6 +78,8 @@ class Stats:
         # page7
         self.ui.btn_harris.clicked.connect(self.harris)
         self.ui.btn_sift.clicked.connect(self.sift)
+        # page8
+        self.ui.btn_answer.clicked.connect(self.answer)
 
         # 路径初始化
         self.curPath = os.path.abspath(os.path.dirname(__file__))
@@ -622,6 +624,13 @@ class Stats:
         self.imshow(self.result + 'chapter7/' + 'SIFT_keypoint.jpg', self.ui.img_new)
 
         self.window = text_window.Stats()
+        self.window.ui.show()
+
+    '''-----------------------------------------------答题卡判卷-------------------------------------------------------'''
+
+    def answer(self):
+        # 调用answer_sheet.ui
+        self.window = answer_sheet.Stats()
         self.window.ui.show()
 
     # 定义图片显示函数
