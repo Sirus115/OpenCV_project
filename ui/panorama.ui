@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1043</width>
+    <height>766</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1043</width>
+    <height>766</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1043</width>
+    <height>766</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>全景图像拼接</string>
+  </property>
+  <widget class="QLabel" name="lbl_show">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>50</y>
+     <width>961</width>
+     <height>451</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>                                             全景合成结果显示</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_open">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>610</y>
+     <width>221</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>打开文件夹</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_emerge">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>610</y>
+     <width>221</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>全景合成</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_status">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>550</y>
+     <width>231</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

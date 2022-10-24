@@ -4,6 +4,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QFileDialog
 from pyqt5_plugins.examplebuttonplugin import QtGui
 
+import grade
 import globalVar
 
 
@@ -32,7 +33,9 @@ class Stats:
         self.imshow(self.file, self.ui.img_origin)
 
     def correct(self):
-
+        self.ans_correct=grade.ans_correct()
+        self.ans_correct.start(self.file)
+        self.imshow(self.result + 'chapter8/' + 'grade.jpg', self.ui.img_new)
 
     # 定义图片显示函数
     def imshow(self, file, label):

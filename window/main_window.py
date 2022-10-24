@@ -8,7 +8,7 @@ import numpy as np
 from pyqt5_plugins.examplebuttonplugin import QtGui
 
 import globalVar
-from window import text_window, answer_sheet
+from window import text_window, answer_sheet, panorama
 
 
 class Stats:
@@ -80,6 +80,12 @@ class Stats:
         self.ui.btn_sift.clicked.connect(self.sift)
         # page8
         self.ui.btn_answer.clicked.connect(self.answer)
+        # page9
+        self.ui.btn_pano.clicked.connect(self.panorama)
+        # page10
+        self.ui.btn_back.clicked.connect(self.background)
+
+
 
         # 路径初始化
         self.curPath = os.path.abspath(os.path.dirname(__file__))
@@ -125,7 +131,7 @@ class Stats:
 
         else:
             # 视频显示
-            vc = cv2.VideoCapture('test.mp4')
+            vc = cv2.VideoCapture(self.file)
 
             # 检查是否打开正确
             if vc.isOpened():
@@ -632,6 +638,50 @@ class Stats:
         # 调用answer_sheet.ui
         self.window = answer_sheet.Stats()
         self.window.ui.show()
+
+    '''----------------------------------------------全景图像拼接------------------------------------------------------'''
+
+    def panorama(self):
+        self.window = panorama.Stats()
+        self.window.ui.show()
+
+    '''----------------------------------------------背景建模----------------------------------------------------------'''
+    def background(self):
+        # 经典的测试视频
+        f = QFileDialog.getOpenFileName(None, "请选择读取的文件",
+                                        self.rootPath, "AVI(*.avi)")
+        avi_file = "".join(list(f[0]))
+        print(avi_file)
+        cap = cv2.VideoCapture(avi_file)
+        # 形态学操作需要使用
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+        # 创建混合高斯模型用于背景建模
+        fgbg = cv2.createBackgroundSubtractorMOG2()
+
+        while (True):
+            ret, frame = cap.read()
+            fgmask = fgbg.apply(frame)
+            # 形态学开运算去噪点
+            fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
+            # 寻找视频中的轮廓
+            contours, hierarchy = cv2.findContours(fgmask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+            for c in contours:
+                # 计算各轮廓的周长
+                perimeter = cv2.arcLength(c, True)
+                if perimeter > 188:
+                    # 找到一个直矩形（不会旋转）
+                    x, y, w, h = cv2.boundingRect(c)
+                    # 画出这个矩形
+                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+            cv2.imshow('Background modeling', frame)
+            k = cv2.waitKey(150) & 0xff
+            if k == 27:
+                break  # 27设置退出条件
+
+        cap.release()
+        cv2.destroyAllWindows()
 
     # 定义图片显示函数
     def imshow(self, file, label):
